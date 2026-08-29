@@ -1,0 +1,35 @@
+<svg width="240" height="240" viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Playden mascot Pip">
+  <defs>
+    <linearGradient id="pip-body" x1="56" y1="66" x2="184" y2="194" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ff2e88"/><stop offset="1" stop-color="#ff7a3d"/>
+    </linearGradient>
+  </defs>
+  <!-- feet -->
+  <ellipse cx="100" cy="196" rx="15" ry="9" fill="#c1286f"/>
+  <ellipse cx="140" cy="196" rx="15" ry="9" fill="#c1286f"/>
+  <!-- arms -->
+  <path d="M60 142 L44 160" stroke="#ff4f96" stroke-width="14" stroke-linecap="round"/>
+  <path d="M180 126 L200 96" stroke="#ff7a3d" stroke-width="14" stroke-linecap="round"/>
+  <!-- star antenna -->
+  <path d="M120 72 L120 50" stroke="#ff7a3d" stroke-width="8" stroke-linecap="round"/>
+  <path d="M120 20 l5 13 13 5 -13 5 -5 13 -5 -13 -13 -5 13 -5 Z" fill="#ffd23f" stroke="#e0a92a" stroke-width="2" stroke-linejoin="round"/>
+  <!-- body -->
+  <ellipse cx="120" cy="130" rx="64" ry="64" fill="url(#pip-body)" stroke="#c1286f" stroke-width="4"/>
+  <!-- blush -->
+  <ellipse cx="80" cy="134" rx="9" ry="6" fill="#ffcfe6" opacity=".85"/>
+  <ellipse cx="160" cy="134" rx="9" ry="6" fill="#ffcfe6" opacity=".85"/>
+  <!-- eyes -->
+  <ellipse cx="101" cy="118" rx="14" ry="17" fill="#fff"/>
+  <ellipse cx="139" cy="118" rx="14" ry="17" fill="#fff"/>
+  <circle cx="104" cy="122" r="7" fill="#3a1230"/>
+  <circle cx="136" cy="122" r="7" fill="#3a1230"/>
+  <circle cx="101.5" cy="119" r="2.6" fill="#fff"/>
+  <circle cx="133.5" cy="119" r="2.6" fill="#fff"/>
+  <!-- mouth -->
+  <path d="M108 138 Q120 150 132 138" stroke="#7a1540" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <!-- belly play badge -->
+  <circle cx="120" cy="166" r="15" fill="#fff"/>
+  <path d="M114 158 L114 174 L129 166 Z" fill="url(#pip-body)"/>
+  <!-- sparkle accent -->
+  <path d="M178 150 l3 8 8 3 -8 3 -3 8 -3 -8 -8 -3 8 -3 Z" fill="#ffd23f"/>
+</svg>

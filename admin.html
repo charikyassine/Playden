@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>SEO Studio · Playden</title>
+<link rel="icon" href="logo.svg" type="image/svg+xml">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{ --bg:#0f1226; --surface:#1a1e3a; --surface-2:#232a4d; --accent:#ff2e88; --accent-2:#7a5cff; --text:#eef0ff; --muted:#9aa0cc; --ok:#35d99a; --warn:#ffcf5c; --line:rgba(255,255,255,.1);
+    --dis:'Baloo 2',system-ui,sans-serif; --body:'Inter',system-ui,sans-serif; }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--text);font-family:var(--body);min-height:100vh}
+  .wrap{max-width:1000px;margin:0 auto;padding:20px 20px 60px}
+  header{display:flex;align-items:center;gap:12px;margin-bottom:6px}
+  header img{width:36px;height:36px}
+  header h1{font-family:var(--dis);font-size:1.4rem}
+  header .tag{margin-left:auto;font-size:.75rem;color:var(--muted);border:1px solid var(--line);padding:4px 10px;border-radius:999px}
+  .note{background:rgba(255,207,92,.1);border:1px solid rgba(255,207,92,.35);color:#ffe6a8;font-size:.85rem;border-radius:12px;padding:12px 14px;margin:14px 0 20px;line-height:1.5}
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  @media(max-width:820px){.cols{grid-template-columns:1fr}}
+  .panel{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px}
+  label{display:block;font-family:var(--dis);font-weight:600;font-size:.82rem;margin:12px 0 5px;color:var(--muted)}
+  input,textarea{width:100%;background:var(--surface-2);border:1px solid var(--line);border-radius:10px;color:var(--text);font-family:var(--body);font-size:.95rem;padding:10px 12px;outline:0}
+  textarea{min-height:200px;resize:vertical;line-height:1.5}
+  .hint{font-size:.74rem;color:var(--muted);margin-top:4px}
+  .checks{list-style:none;font-size:.85rem}
+  .checks li{padding:7px 0;border-bottom:1px solid var(--line);display:flex;gap:8px;align-items:flex-start}
+  .checks li:last-child{border:0}
+  .dot{width:16px;height:16px;border-radius:50%;flex:none;margin-top:2px;display:grid;place-items:center;font-size:10px;font-weight:700}
+  .dot.ok{background:rgba(53,217,154,.2);color:var(--ok)} .dot.no{background:rgba(255,207,92,.2);color:var(--warn)}
+  .btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+  button{font-family:var(--dis);font-weight:700;font-size:.9rem;border:0;border-radius:999px;padding:11px 20px;cursor:pointer;color:#fff;background:linear-gradient(100deg,var(--accent),var(--accent-2))}
+  button.ghost{background:transparent;border:1px solid var(--line);color:var(--text)}
+  pre{background:var(--surface-2);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.72rem;max-height:280px;white-space:pre-wrap;word-break:break-word}
+  /* gate */
+  .gate{position:fixed;inset:0;background:var(--bg);display:grid;place-items:center;z-index:10;padding:20px}
+  .gate .box{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:28px;max-width:380px;text-align:center}
+  .gate h2{font-family:var(--dis);margin-bottom:8px}
+  .gate p{color:var(--muted);font-size:.85rem;margin-bottom:16px}
+  .gate input{text-align:center;margin-bottom:12px}
+  .hidden{display:none}
+</style>
+</head>
+<body>
+  <!-- cosmetic gate -->
+  <div class="gate" id="gate">
+    <div class="box">
+      <img src="logo.svg" width="52" alt="Playden" style="margin-bottom:10px">
+      <h2>SEO Studio</h2>
+      <p>Enter the studio passcode.</p>
+      <input id="pass" type="password" placeholder="Passcode" autocomplete="off">
+      <button onclick="tryPass()" style="width:100%">Enter</button>
+      <p style="margin-top:14px;font-size:.72rem">Heads up: this passcode only hides the page from a casual visitor — it is <b>not</b> real security (anyone who views the source can see it). Real protection comes from keeping this file in a private/edit-restricted GitHub repo, or using a login CMS like Decap. Default passcode: <code>playden</code> — change it in the file.</p>
+    </div>
+  </div>
+
+  <div class="wrap hidden" id="app">
+    <header>
+      <img src="logo.svg" alt="Playden"><h1>SEO Studio</h1>
+      <span class="tag">private · not indexed</span>
+    </header>
+
+    <div class="note">
+      <b>How this helps your SEO:</b> it writes clean, search-friendly article pages you publish to your <b>public</b> blog — that's what Google ranks. It does <b>not</b> hide pages or feed search engines different content than visitors (that's "cloaking" and gets sites penalized). Write genuinely useful articles and this tool handles the technical SEO for you.
+    </div>
+
+    <div class="cols">
+      <div class="panel">
+        <label>Article title</label>
+        <input id="f-title" placeholder="e.g. 10 Best Puzzle Games for Beginners">
+        <div class="hint" id="c-title"></div>
+
+        <label>URL slug (filename)</label>
+        <input id="f-slug" placeholder="best-puzzle-games">
+        <div class="hint">Publishes as <code id="slug-view">article-slug.html</code></div>
+
+        <label>Meta description</label>
+        <textarea id="f-desc" style="min-height:70px" placeholder="One or two sentences that appear under the title in Google results."></textarea>
+        <div class="hint" id="c-desc"></div>
+
+        <label>Focus keyword</label>
+        <input id="f-kw" placeholder="puzzle games">
+
+        <label>Body</label>
+        <textarea id="f-body" placeholder="Write here. Start a line with '## ' to make a section heading. Leave a blank line between paragraphs."></textarea>
+        <div class="btns">
+          <button onclick="generate()">Generate page</button>
+          <button class="ghost" onclick="download()">Download .html</button>
+          <button class="ghost" onclick="copyOut()">Copy code</button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <label>SEO checklist</label>
+        <ul class="checks" id="checks"></ul>
+        <label style="margin-top:16px">Generated page</label>
+        <pre id="out">Fill the form and press “Generate page”.</pre>
+        <div class="hint" style="margin-top:10px">To publish: download the file, drop it in your repo, then add a link to it on <code>blog.html</code>. Commit &amp; it goes live.</div>
+      </div>
+    </div>
+  </div>
+
+<script>
+  const PASSCODE = "playden"; // change me
+  function tryPass(){
+    if(document.getElementById("pass").value === PASSCODE){
+      document.getElementById("gate").classList.add("hidden");
+      document.getElementById("app").classList.remove("hidden");
+    } else { document.getElementById("pass").value=""; document.getElementById("pass").placeholder="Try again"; }
+  }
+  document.getElementById("pass").addEventListener("keydown",e=>{ if(e.key==="Enter") tryPass(); });
+
+  const $ = id => document.getElementById(id);
+  const esc = s => s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+  const slugify = s => s.toLowerCase().trim().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
+
+  ["f-title","f-slug","f-desc","f-kw","f-body"].forEach(id=>$(id).addEventListener("input",review));
+  $("f-title").addEventListener("input",()=>{ if(!$("f-slug").value) {} });
+
+  function bodyToHtml(raw){
+    return raw.split(/\n\s*\n/).map(b=>{
+      b=b.trim(); if(!b) return "";
+      if(b.startsWith("## ")) return "    <h2>"+esc(b.slice(3).trim())+"</h2>";
+      return "    <p>"+esc(b)+"</p>";
+    }).filter(Boolean).join("\n");
+  }
+  function pageHtml(){
+    const title=$("f-title").value.trim()||"Untitled";
+    const slug=slugify($("f-slug").value|| $("f-slug").value)||slugify(title)||"article";
+    const desc=$("f-desc").value.trim();
+    const kw=$("f-kw").value.trim();
+    const url="https://playden.fun/article-"+slug+".html";
+    return `<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>${esc(title)} | Playden</title>
+<meta name="description" content="${esc(desc)}">
+${kw?`<meta name="keywords" content="${esc(kw)}">\n`:""}<link rel="canonical" href="${url}">
+<meta property="og:title" content="${esc(title)}">
+<meta property="og:description" content="${esc(desc)}">
+<meta property="og:type" content="article">
+<meta property="og:image" content="logo.svg">
+<link rel="icon" href="logo.svg" type="image/svg+xml">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#fff0f6;--bg2:#ffe1ee;--accent:#ff2e88;--accent-2:#ff7a3d;--text:#2a0f1e;--muted:#a25c7d;--dis:'Baloo 2',sans-serif;--body:'Inter',sans-serif}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:linear-gradient(160deg,var(--bg),var(--bg2));background-attachment:fixed;color:var(--text);font-family:var(--body);line-height:1.65}
+  .wrap{max-width:720px;margin:0 auto;padding:22px 20px 60px}
+  .brand{display:flex;align-items:center;gap:10px;text-decoration:none;margin-bottom:10px}
+  .brand img{width:36px;height:36px}
+  .brand span{font-family:var(--dis);font-weight:800;font-size:1.35rem;background:linear-gradient(100deg,var(--accent),var(--accent-2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  h1{font-family:var(--dis);font-weight:800;font-size:clamp(1.9rem,6vw,2.6rem);margin:22px 0 8px;line-height:1.1}
+  h2{font-family:var(--dis);font-weight:700;font-size:1.4rem;margin:28px 0 10px}
+  p{margin:0 0 14px} a{color:var(--accent);font-weight:600}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <a class="brand" href="index.html"><img src="logo.svg" alt="Playden logo"><span>playden</span></a>
+    <h1>${esc(title)}</h1>
+${bodyToHtml($("f-body").value)}
+    <p><a href="index.html">← Back to games</a></p>
+  </div>
+</body>
+</html>`;
+  }
+  function review(){
+    const title=$("f-title").value.trim(), desc=$("f-desc").value.trim(), kw=$("f-kw").value.trim().toLowerCase(), body=$("f-body").value;
+    if(!$("f-slug").dataset.touched) $("f-slug").value=slugify(title);
+    $("slug-view").textContent = "article-"+(slugify($("f-slug").value)||"slug")+".html";
+    $("c-title").textContent = title.length? `${title.length} chars ${title.length>=40&&title.length<=60?"✓ ideal":"(aim 40–60)"}`:"";
+    $("c-desc").textContent = desc.length? `${desc.length} chars ${desc.length>=120&&desc.length<=160?"✓ ideal":"(aim 120–160)"}`:"";
+    const hasH2=/(^|\n)\s*##\s+/.test(body);
+    const words=body.trim()?body.trim().split(/\s+/).length:0;
+    const kwOk = kw && (title.toLowerCase().includes(kw)||body.toLowerCase().includes(kw));
+    const checks=[
+      [title.length>=40&&title.length<=60,"Title length 40–60 characters"],
+      [desc.length>=120&&desc.length<=160,"Meta description 120–160 characters"],
+      [hasH2,"At least one section heading (## )"],
+      [words>=150,`Body has enough content (${words} words, aim 150+)`],
+      [!!kw&&kwOk,"Focus keyword appears in title or body"],
+      [!!$("f-slug").value,"URL slug set"]
+    ];
+    $("checks").innerHTML = checks.map(([ok,txt])=>`<li><span class="dot ${ok?"ok":"no"}">${ok?"✓":"!"}</span>${txt}</li>`).join("");
+  }
+  $("f-slug").addEventListener("input",()=>{$("f-slug").dataset.touched="1";});
+  function generate(){ $("out").textContent = pageHtml(); review(); }
+  function download(){
+    const slug=slugify($("f-slug").value)||"article";
+    const blob=new Blob([pageHtml()],{type:"text/html"});
+    const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="article-"+slug+".html"; a.click();
+  }
+  function copyOut(){ navigator.clipboard.writeText(pageHtml()); }
+  review();
+</script>
+</body>
+</html>
