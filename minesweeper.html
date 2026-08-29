@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Minesweeper · Playden</title><link rel="icon" href="../logo.svg">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Inter:wght@500&display=swap" rel="stylesheet">
+<style>
+ :root{--accent:#ff2e88;--accent-2:#ff7a3d;--bg:#fff0f6;--bg2:#ffe1ee;--text:#2a0f1e}
+ *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+ body{background:linear-gradient(160deg,var(--bg),var(--bg2));min-height:100vh;font-family:'Inter',sans-serif;color:var(--text);display:flex;flex-direction:column;align-items:center;padding:16px}
+ a.back{align-self:flex-start;text-decoration:none;color:var(--accent);font-family:'Baloo 2';font-weight:700}
+ h1{font-family:'Baloo 2';font-weight:800;font-size:1.8rem;margin:6px 0;background:linear-gradient(100deg,var(--accent),var(--accent-2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+ .bar{display:flex;gap:12px;align-items:center;font-family:'Baloo 2';font-weight:700;margin-bottom:10px}
+ .flag{border:0;border-radius:999px;padding:7px 16px;font-family:'Baloo 2';font-weight:700;cursor:pointer;background:#fff;color:var(--accent);box-shadow:0 4px 12px rgba(255,46,136,.15)}
+ .flag.on{background:linear-gradient(100deg,var(--accent),var(--accent-2));color:#fff}
+ #g{display:grid;gap:3px;background:#ffd9ea;padding:6px;border-radius:14px;touch-action:manipulation;box-shadow:0 10px 30px rgba(255,46,136,.18)}
+ .c{width:min(9vw,34px);height:min(9vw,34px);border-radius:6px;background:#fff;display:grid;place-items:center;font-family:'Baloo 2';font-weight:800;font-size:.95rem;cursor:pointer;user-select:none}
+ .c.rev{background:#ffeef6;cursor:default}.c.mine{background:#ff5a5a;color:#fff}
+ .c[data-n="1"]{color:#2e7dff}.c[data-n="2"]{color:#12b76a}.c[data-n="3"]{color:#ff2e88}.c[data-n="4"]{color:#8a3ffc}.c[data-n="5"]{color:#ff7a3d}
+ .msg{font-family:'Baloo 2';font-weight:700;margin-top:12px;min-height:24px}
+ .btn{margin-top:10px;border:0;border-radius:999px;padding:10px 24px;font-family:'Baloo 2';font-weight:700;color:#fff;background:linear-gradient(100deg,var(--accent),var(--accent-2));cursor:pointer}
+</style></head><body>
+<a class="back" href="../index.html">← Playden</a>
+<h1>💣 Minesweeper</h1>
+<div class="bar"><span>Mines: <span id="mc">10</span></span><button class="flag" id="fl">🚩 Flag: off</button></div>
+<div id="g"></div>
+<div class="msg" id="m">Tap to reveal. Turn on Flag to mark mines.</div>
+<button class="btn" id="r">New game</button>
+<script>
+const N=9,MINES=10,G=document.getElementById('g');G.style.gridTemplateColumns=`repeat(${N},1fr)`;
+let board,rev,flag,flagMode=false,dead,won;
+document.getElementById('fl').addEventListener('click',()=>{flagMode=!flagMode;const b=document.getElementById('fl');b.classList.toggle('on',flagMode);b.textContent='🚩 Flag: '+(flagMode?'on':'off');});
+function reset(){board=[];rev=[];flag=[];dead=won=false;document.getElementById('m').textContent='Tap to reveal. Turn on Flag to mark mines.';
+ for(let i=0;i<N*N;i++){board[i]=0;rev[i]=false;flag[i]=false;}
+ let placed=0;while(placed<MINES){const p=(Math.random()*N*N)|0;if(board[p]!==-1){board[p]=-1;placed++;}}
+ for(let i=0;i<N*N;i++){if(board[i]===-1)continue;let n=0;neighbors(i).forEach(j=>{if(board[j]===-1)n++;});board[i]=n;}
+ draw();}
+function neighbors(i){const r=(i/N)|0,c=i%N,out=[];for(let dr=-1;dr<=1;dr++)for(let dc=-1;dc<=1;dc++){if(!dr&&!dc)continue;const nr=r+dr,nc=c+dc;if(nr>=0&&nr<N&&nc>=0&&nc<N)out.push(nr*N+nc);}return out;}
+function draw(){G.innerHTML='';for(let i=0;i<N*N;i++){const d=document.createElement('div');d.className='c';
+ if(rev[i]){d.classList.add('rev');if(board[i]===-1){d.classList.add('mine');d.textContent='💣';}else if(board[i]>0){d.dataset.n=board[i];d.textContent=board[i];}}
+ else if(flag[i]){d.textContent='🚩';}
+ d.addEventListener('click',()=>tap(i));G.appendChild(d);}}
+function tap(i){if(dead||won)return;
+ if(flagMode){if(!rev[i]){flag[i]=!flag[i];draw();}return;}
+ if(flag[i]||rev[i])return;
+ if(board[i]===-1){rev[i]=true;dead=true;for(let k=0;k<N*N;k++)if(board[k]===-1)rev[k]=true;draw();document.getElementById('m').textContent='💥 Boom! Try again.';return;}
+ flood(i);draw();checkWin();}
+function flood(i){if(rev[i]||flag[i])return;rev[i]=true;if(board[i]===0)neighbors(i).forEach(flood);}
+function checkWin(){let ok=true;for(let i=0;i<N*N;i++){if(board[i]!==-1&&!rev[i])ok=false;}if(ok){won=true;document.getElementById('m').textContent='🎉 Cleared! You win!';}}
+document.getElementById('r').addEventListener('click',reset);reset();
+</script></body></html>

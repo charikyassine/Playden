@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>2048 · Playden</title><link rel="icon" href="../logo.svg">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Inter:wght@500&display=swap" rel="stylesheet">
+<style>
+ :root{--accent:#ff2e88;--accent-2:#ff7a3d;--bg:#fff0f6;--bg2:#ffe1ee;--text:#2a0f1e}
+ *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+ body{background:linear-gradient(160deg,var(--bg),var(--bg2));min-height:100vh;font-family:'Inter',sans-serif;color:var(--text);display:flex;flex-direction:column;align-items:center;padding:16px}
+ a.back{align-self:flex-start;text-decoration:none;color:var(--accent);font-family:'Baloo 2';font-weight:700}
+ h1{font-family:'Baloo 2';font-weight:800;font-size:1.8rem;margin:6px 0;background:linear-gradient(100deg,var(--accent),var(--accent-2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+ .score{font-family:'Baloo 2';font-weight:700;margin-bottom:10px}
+ #g{background:#ffd9ea;border-radius:16px;padding:8px;display:grid;grid-template-columns:repeat(4,1fr);gap:8px;width:min(92vw,360px);aspect-ratio:1;touch-action:none;box-shadow:0 10px 30px rgba(255,46,136,.18)}
+ .t{border-radius:10px;display:grid;place-items:center;font-family:'Baloo 2';font-weight:800;font-size:clamp(1rem,6vw,1.7rem);background:#fff;color:#2a0f1e;transition:transform .08s}
+ .t[data-v="0"]{background:#ffe6f1;color:transparent}
+ .t[data-v="2"]{background:#ffe0ee}.t[data-v="4"]{background:#ffcfe3}
+ .t[data-v="8"]{background:#ffb26b;color:#fff}.t[data-v="16"]{background:#ff9a4d;color:#fff}
+ .t[data-v="32"]{background:#ff7a3d;color:#fff}.t[data-v="64"]{background:#ff5a2d;color:#fff}
+ .t[data-v="128"]{background:#ff5c9d;color:#fff}.t[data-v="256"]{background:#ff3d88;color:#fff}
+ .t[data-v="512"]{background:#ff2e88;color:#fff}.t[data-v="1024"]{background:#e01f70;color:#fff}
+ .t[data-v="2048"]{background:#c1105c;color:#fff}
+ .msg{font-family:'Baloo 2';font-weight:700;margin-top:12px;min-height:24px}
+ .btn{margin-top:10px;border:0;border-radius:999px;padding:10px 24px;font-family:'Baloo 2';font-weight:700;color:#fff;background:linear-gradient(100deg,var(--accent),var(--accent-2));cursor:pointer}
+</style></head><body>
+<a class="back" href="../index.html">← Playden</a>
+<h1>2048</h1>
+<div class="score">Score: <span id="s">0</span> · Best: <span id="b">0</span></div>
+<div id="g"></div>
+<div class="msg" id="m">Arrows / WASD / swipe to merge tiles</div>
+<button class="btn" id="r">New game</button>
+<script>
+let grid,score,best=+(localStorage.getItem('g2048Best')||0);
+const G=document.getElementById('g');document.getElementById('b').textContent=best;
+for(let i=0;i<16;i++){const d=document.createElement('div');d.className='t';G.appendChild(d);}
+const cells=[...G.children];
+function reset(){grid=Array(16).fill(0);score=0;add();add();paint();document.getElementById('m').textContent='Arrows / WASD / swipe to merge tiles';}
+function add(){const e=grid.map((v,i)=>v===0?i:-1).filter(i=>i>=0);if(!e.length)return;grid[e[(Math.random()*e.length)|0]]=Math.random()<.9?2:4;}
+function paint(){grid.forEach((v,i)=>{cells[i].dataset.v=v;cells[i].textContent=v||'';});document.getElementById('s').textContent=score;if(score>best){best=score;localStorage.setItem('g2048Best',best);document.getElementById('b').textContent=best;}}
+function rows(){return [0,1,2,3].map(r=>[0,1,2,3].map(c=>grid[r*4+c]));}
+function setRows(rs){rs.forEach((row,r)=>row.forEach((v,c)=>grid[r*4+c]=v));}
+function slide(row){let a=row.filter(x=>x);for(let i=0;i<a.length-1;i++){if(a[i]===a[i+1]){a[i]*=2;score+=a[i];a.splice(i+1,1);}}while(a.length<4)a.push(0);return a;}
+function move(dir){let r=rows(),moved=false,before=JSON.stringify(grid);
+ function apply(transform,back){let rr=transform(r);rr=rr.map(slide);setRows(back(rr));}
+ if(dir==='L'){setRows(r.map(slide));}
+ else if(dir==='R'){setRows(r.map(row=>slide(row.slice().reverse()).reverse()));}
+ else if(dir==='U'){let cols=[0,1,2,3].map(c=>[0,1,2,3].map(rw=>grid[rw*4+c]));cols=cols.map(slide);cols.forEach((col,c)=>col.forEach((v,rw)=>grid[rw*4+c]=v));}
+ else if(dir==='D'){let cols=[0,1,2,3].map(c=>[0,1,2,3].map(rw=>grid[rw*4+c]));cols=cols.map(col=>slide(col.slice().reverse()).reverse());cols.forEach((col,c)=>col.forEach((v,rw)=>grid[rw*4+c]=v));}
+ if(JSON.stringify(grid)!==before){add();paint();if(over())document.getElementById('m').textContent='Game over! Score '+score;else if(grid.includes(2048))document.getElementById('m').textContent='🎉 You made 2048!';}
+}
+function over(){if(grid.includes(0))return false;for(let r=0;r<4;r++)for(let c=0;c<4;c++){const v=grid[r*4+c];if(c<3&&v===grid[r*4+c+1])return false;if(r<3&&v===grid[(r+1)*4+c])return false;}return true;}
+addEventListener('keydown',e=>{const k=e.key.toLowerCase(),m={arrowleft:'L',a:'L',arrowright:'R',d:'R',arrowup:'U',w:'U',arrowdown:'D',s:'D'}[k];if(m){e.preventDefault();move(m);}});
+let tx,ty;G.addEventListener('touchstart',e=>{tx=e.touches[0].clientX;ty=e.touches[0].clientY;},{passive:true});
+G.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-tx,dy=e.changedTouches[0].clientY-ty;if(Math.max(Math.abs(dx),Math.abs(dy))<20)return;if(Math.abs(dx)>Math.abs(dy))move(dx>0?'R':'L');else move(dy>0?'D':'U');});
+document.getElementById('r').addEventListener('click',reset);
+reset();
+</script></body></html>

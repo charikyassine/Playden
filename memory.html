@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Memory Match · Playden</title><link rel="icon" href="../logo.svg">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Inter:wght@500&display=swap" rel="stylesheet">
+<style>
+ :root{--accent:#ff2e88;--accent-2:#ff7a3d;--bg:#fff0f6;--bg2:#ffe1ee;--text:#2a0f1e}
+ *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+ body{background:linear-gradient(160deg,var(--bg),var(--bg2));min-height:100vh;font-family:'Inter',sans-serif;color:var(--text);display:flex;flex-direction:column;align-items:center;padding:16px}
+ a.back{align-self:flex-start;text-decoration:none;color:var(--accent);font-family:'Baloo 2';font-weight:700}
+ h1{font-family:'Baloo 2';font-weight:800;font-size:1.8rem;margin:6px 0;background:linear-gradient(100deg,var(--accent),var(--accent-2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+ .score{font-family:'Baloo 2';font-weight:700;margin-bottom:10px}
+ #g{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;width:min(92vw,360px)}
+ .card{aspect-ratio:1;border-radius:12px;position:relative;cursor:pointer;perspective:600px}
+ .inner{position:absolute;inset:0;transition:transform .3s;transform-style:preserve-3d}
+ .card.flip .inner,.card.done .inner{transform:rotateY(180deg)}
+ .face{position:absolute;inset:0;border-radius:12px;display:grid;place-items:center;font-size:clamp(1.4rem,8vw,2rem);backface-visibility:hidden;box-shadow:0 5px 14px rgba(255,46,136,.14)}
+ .front{background:linear-gradient(135deg,var(--accent),var(--accent-2))}
+ .back{background:#fff;transform:rotateY(180deg)}
+ .card.done .back{opacity:.55}
+ .msg{font-family:'Baloo 2';font-weight:700;margin-top:14px;min-height:24px}
+ .btn{margin-top:10px;border:0;border-radius:999px;padding:10px 24px;font-family:'Baloo 2';font-weight:700;color:#fff;background:linear-gradient(100deg,var(--accent),var(--accent-2));cursor:pointer}
+</style></head><body>
+<a class="back" href="../index.html">← Playden</a>
+<h1>🧠 Memory Match</h1>
+<div class="score">Moves: <span id="mv">0</span> · Best: <span id="b">—</span></div>
+<div id="g"></div>
+<div class="msg" id="m">Find all the pairs!</div>
+<button class="btn" id="r">New game</button>
+<script>
+const EMO=['🎮','⭐','🚀','🐱','🍭','🎈','🌈','⚡'];
+let deck,first,lock,moves,matched,best=localStorage.getItem('memBest');
+const G=document.getElementById('g');document.getElementById('b').textContent=best||'—';
+function reset(){G.innerHTML='';first=null;lock=false;moves=0;matched=0;document.getElementById('mv').textContent=0;document.getElementById('m').textContent='Find all the pairs!';
+ deck=[...EMO,...EMO].map(e=>({e,k:Math.random()})).sort((a,b)=>a.k-b.k);
+ deck.forEach((d,i)=>{const c=document.createElement('div');c.className='card';c.dataset.e=d.e;
+  c.innerHTML='<div class="inner"><div class="face front">?</div><div class="face back">'+d.e+'</div></div>';
+  c.addEventListener('click',()=>flip(c));G.appendChild(c);});}
+function flip(c){if(lock||c.classList.contains('flip')||c.classList.contains('done'))return;
+ c.classList.add('flip');
+ if(!first){first=c;return;}
+ moves++;document.getElementById('mv').textContent=moves;
+ if(first.dataset.e===c.dataset.e){first.classList.add('done');c.classList.add('done');first=null;matched++;
+  if(matched===EMO.length){document.getElementById('m').textContent='🎉 Solved in '+moves+' moves!';if(!best||moves<+best){best=moves;localStorage.setItem('memBest',best);document.getElementById('b').textContent=best;}}
+ }else{lock=true;const a=first;first=null;setTimeout(()=>{a.classList.remove('flip');c.classList.remove('flip');lock=false;},700);}}
+document.getElementById('r').addEventListener('click',reset);reset();
+</script></body></html>
