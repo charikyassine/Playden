@@ -52,6 +52,11 @@
   .card .emoji { font-size:2rem; display:grid; place-items:center; height:62px; border-radius:14px; background:linear-gradient(135deg,rgba(var(--glow),.14),transparent); margin-bottom:10px; }
   .card h3 { font-family:var(--font-display); font-weight:600; font-size:.95rem; line-height:1.15; }
   .card span { color:var(--muted); font-size:.76rem; }
+  a.card { text-decoration:none; color:inherit; display:block; position:relative; }
+  a.card.play { box-shadow:0 5px 16px rgba(var(--glow),.20), inset 0 0 0 1.5px rgba(var(--glow),.5); }
+  a.card.play:hover { box-shadow:0 16px 30px rgba(var(--glow),.28), inset 0 0 0 1.5px rgba(var(--glow),.7); }
+  .badge { position:absolute; top:10px; right:10px; width:24px; height:24px; border-radius:50%; display:grid; place-items:center; font-size:.7rem; color:var(--ink); background:linear-gradient(100deg,var(--accent),var(--accent-2)); box-shadow:0 3px 8px rgba(var(--glow),.4); }
+  html[dir="rtl"] .badge { right:auto; left:10px; }
   .empty { color:var(--muted); text-align:center; padding:30px; grid-column:1/-1; }
   .more-wrap { text-align:center; margin-top:22px; }
   .more { font-family:var(--font-display); font-weight:700; font-size:.95rem; color:var(--ink); background:linear-gradient(100deg,var(--accent),var(--accent-2)); border:0; padding:12px 28px; border-radius:999px; cursor:pointer; box-shadow:0 8px 22px rgba(var(--glow),.32); }
@@ -183,12 +188,26 @@
     platformer:["Jump","Hopper","Leap","Climb","Dash","Bounce","Runner","Quest","Slide","Skip"]
   };
   const PER_CAT = 52;
+  // ▶ REAL PLAYABLE GAMES — to add an open-source game, copy a line here:
+  // { name:"Game Name", cat:"brain", emoji:"🔷", file:"games/yourgame/index.html" }
+  const PLAYABLE = [
+    { name:"Snake",        cat:"classic",    emoji:"🐍", file:"games/snake.html" },
+    { name:"2048",         cat:"brain",      emoji:"🔢", file:"games/2048.html" },
+    { name:"Memory Match", cat:"brain",      emoji:"🧠", file:"games/memory.html" },
+    { name:"Tic-Tac-Toe",  cat:"classic",    emoji:"⭕", file:"games/tictactoe.html" },
+    { name:"Minesweeper",  cat:"classic",    emoji:"💣", file:"games/minesweeper.html" },
+    { name:"Brick Breaker",cat:"arcade",     emoji:"🧱", file:"games/breakout.html" },
+    { name:"Whack-a-Mole", cat:"arcade",     emoji:"🔨", file:"games/whack.html" }
+  ];
+
   const GAMES = [];
+  PLAYABLE.forEach(g=>GAMES.push(g)); // real games first
+  const playableNames = new Set(PLAYABLE.map(g=>g.name));
   Object.keys(NOUN).forEach(cat=>{
     const seen=new Set(), out=[];
     (CURATED[cat]||[]).forEach(n=>{ if(!seen.has(n)){seen.add(n);out.push(n);} });
     outer: for(const a of ADJ){ for(const n of NOUN[cat]){ const nm=a+" "+n; if(!seen.has(nm)){seen.add(nm);out.push(nm);} if(out.length>=PER_CAT) break outer; } }
-    out.forEach(name=>GAMES.push({name,cat}));
+    out.forEach(name=>{ if(!playableNames.has(name)) GAMES.push({name,cat}); });
   });
 
   const PAGE = 60;
@@ -210,7 +229,13 @@
     const t=T(), list=filtered();
     countEl.textContent = t.found(list.length);
     const page=list.slice(0,shown);
-    grid.innerHTML = page.length ? page.map(g=>`<div class="card"><div class="emoji">${CAT_EMOJI[g.cat]}</div><h3>${g.name}</h3><span>${t.cats[g.cat]}</span></div>`).join("") : `<div class="empty">🔍</div>`;
+    grid.innerHTML = page.length ? page.map(g=>{
+      const emoji=g.emoji||CAT_EMOJI[g.cat];
+      const inner=`<div class="emoji">${emoji}</div><h3>${g.name}</h3><span>${t.cats[g.cat]}</span>`;
+      return g.file
+        ? `<a class="card play" href="${g.file}"><span class="badge">▶</span>${inner}</a>`
+        : `<div class="card">${inner}</div>`;
+    }).join("") : `<div class="empty">🔍</div>`;
     moreBtn.textContent = t.more;
     moreBtn.disabled = shown>=list.length;
   }
