@@ -1,0 +1,33 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Word Scramble · Playden</title><link rel="icon" href="../logo.svg">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Inter:wght@500&display=swap" rel="stylesheet">
+<style>
+ :root{--accent:#7a5cff;--accent-2:#00b8d4;--bg:#eef0ff;--bg2:#e0e6ff;--text:#1a1440}
+ *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+ body{background:linear-gradient(160deg,var(--bg),var(--bg2));min-height:100vh;font-family:'Inter',sans-serif;color:var(--text);display:flex;flex-direction:column;align-items:center;padding:16px}
+ a.back{align-self:flex-start;text-decoration:none;color:var(--accent);font-family:'Baloo 2';font-weight:700}
+ h1{font-family:'Baloo 2';font-weight:800;font-size:1.7rem;margin:6px 0;background:linear-gradient(100deg,var(--accent),var(--accent-2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+ .score{font-family:'Baloo 2';font-weight:700;margin-bottom:10px}
+ .msg{font-family:'Baloo 2';font-weight:700;margin-top:12px;min-height:24px;text-align:center}
+ .btn{margin-top:10px;border:0;border-radius:999px;padding:10px 24px;font-family:'Baloo 2';font-weight:700;color:#fff;background:linear-gradient(100deg,var(--accent),var(--accent-2));cursor:pointer} .word{font-family:'Baloo 2';font-weight:800;font-size:2.6rem;letter-spacing:6px;margin:16px 0}
+ input{font-family:'Baloo 2';font-weight:700;font-size:1.2rem;text-align:center;padding:12px 16px;border-radius:12px;border:2px solid #cdd2ff;outline:0;width:min(80vw,280px)}
+ input:focus{border-color:var(--accent)}
+ .hint{color:#6b6a8f;font-size:.9rem;margin-top:8px}
+</style></head><body>
+<a class="back" href="../index.html">← Playden</a><h1>🔤 Word Scramble</h1>
+<div class="score">Score: <span id="s">0</span> · Best: <span id="b">0</span></div>
+<div class="word" id="w">—</div>
+<input id="g" placeholder="type the word" autocomplete="off" autocapitalize="off">
+<div class="hint" id="h"></div>
+<div class="msg" id="m">Unscramble the letters</div>
+<button class="btn" id="c">Check</button> <button class="btn" id="n" style="background:#8a88b5">Skip</button>
+<script>
+const WORDS=[['planet','space'],['puzzle','brain teaser'],['guitar','music'],['dolphin','ocean animal'],['rocket','flies to space'],['garden','has flowers'],['pyramid','in Egypt'],['diamond','a gem'],['volcano','erupts'],['penguin','cold bird'],['bicycle','two wheels'],['rainbow','after rain'],['captain','leads a ship'],['monster','scary'],['library','full of books']];
+let cur,score=0,best=+(localStorage.getItem('scrambleBest')||0);document.getElementById('b').textContent=best;
+function scramble(w){let a=w.split('');do{a.sort(()=>Math.random()-.5);}while(a.join('')===w);return a.join('');}
+function load(){cur=WORDS[(Math.random()*WORDS.length)|0];document.getElementById('w').textContent=scramble(cur[0]).toUpperCase();document.getElementById('h').textContent='Hint: '+cur[1];document.getElementById('g').value='';document.getElementById('m').textContent='Unscramble the letters';document.getElementById('g').focus();}
+function check(){if(document.getElementById('g').value.trim().toLowerCase()===cur[0]){score++;document.getElementById('s').textContent=score;if(score>best){best=score;localStorage.setItem('scrambleBest',best);document.getElementById('b').textContent=best;}document.getElementById('m').textContent='✅ Correct!';setTimeout(load,700);}else{document.getElementById('m').textContent='❌ Try again';}}
+document.getElementById('c').onclick=check;document.getElementById('n').onclick=load;
+document.getElementById('g').addEventListener('keydown',e=>{if(e.key==='Enter')check();});
+load();
+</script></body></html>

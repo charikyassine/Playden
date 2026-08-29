@@ -1,0 +1,29 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Sliding Puzzle · Playden</title><link rel="icon" href="../logo.svg">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Inter:wght@500&display=swap" rel="stylesheet">
+<style>
+ :root{--accent:#7a5cff;--accent-2:#00b8d4;--bg:#eef0ff;--bg2:#e0e6ff;--text:#1a1440}
+ *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+ body{background:linear-gradient(160deg,var(--bg),var(--bg2));min-height:100vh;font-family:'Inter',sans-serif;color:var(--text);display:flex;flex-direction:column;align-items:center;padding:16px}
+ a.back{align-self:flex-start;text-decoration:none;color:var(--accent);font-family:'Baloo 2';font-weight:700}
+ h1{font-family:'Baloo 2';font-weight:800;font-size:1.7rem;margin:6px 0;background:linear-gradient(100deg,var(--accent),var(--accent-2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+ .score{font-family:'Baloo 2';font-weight:700;margin-bottom:10px}
+ .msg{font-family:'Baloo 2';font-weight:700;margin-top:12px;min-height:24px;text-align:center}
+ .btn{margin-top:10px;border:0;border-radius:999px;padding:10px 24px;font-family:'Baloo 2';font-weight:700;color:#fff;background:linear-gradient(100deg,var(--accent),var(--accent-2));cursor:pointer}
+ #g{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;width:min(84vw,320px);aspect-ratio:1;background:#d7dbff;padding:6px;border-radius:14px;box-shadow:0 10px 30px rgba(122,92,255,.18)}
+ .t{border-radius:10px;display:grid;place-items:center;font-family:'Baloo 2';font-weight:800;font-size:1.5rem;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;cursor:pointer;user-select:none}
+ .t.empty{background:transparent;cursor:default}
+</style></head><body>
+<a class="back" href="../index.html">← Playden</a><h1>🔢 Sliding Puzzle</h1>
+<div class="score">Moves: <span id="mv">0</span></div>
+<div id="g"></div>
+<div class="msg" id="m">Put the numbers 1–15 in order</div>
+<button class="btn" id="r">Shuffle</button>
+<script>
+const G=document.getElementById('g');let b,moves;
+function solved(){for(let i=0;i<15;i++)if(b[i]!==i+1)return false;return true;}
+function draw(){G.innerHTML='';b.forEach((v,i)=>{const d=document.createElement('div');d.className='t'+(v===0?' empty':'');d.textContent=v||'';d.addEventListener('click',()=>move(i));G.appendChild(d);});}
+function move(i){const e=b.indexOf(0),r=(i/4)|0,c=i%4,er=(e/4)|0,ec=e%4;if((r===er&&Math.abs(c-ec)===1)||(c===ec&&Math.abs(r-er)===1)){[b[i],b[e]]=[b[e],b[i]];moves++;document.getElementById('mv').textContent=moves;draw();if(solved())document.getElementById('m').textContent='🎉 Solved in '+moves+' moves!';}}
+function shuffle(){b=[...Array(15).keys()].map(x=>x+1);b.push(0);for(let k=0;k<300;k++){const e=b.indexOf(0),opts=[];const r=(e/4)|0,c=e%4;if(r>0)opts.push(e-4);if(r<3)opts.push(e+4);if(c>0)opts.push(e-1);if(c<3)opts.push(e+1);const s=opts[(Math.random()*opts.length)|0];[b[e],b[s]]=[b[s],b[e]];}moves=0;document.getElementById('mv').textContent=0;document.getElementById('m').textContent='Put the numbers 1–15 in order';draw();}
+document.getElementById('r').addEventListener('click',shuffle);shuffle();
+</script></body></html>

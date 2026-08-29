@@ -1,0 +1,32 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Schulte Table · Playden</title><link rel="icon" href="../logo.svg">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Inter:wght@500&display=swap" rel="stylesheet">
+<style>
+ :root{--accent:#7a5cff;--accent-2:#00b8d4;--bg:#eef0ff;--bg2:#e0e6ff;--text:#1a1440}
+ *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+ body{background:linear-gradient(160deg,var(--bg),var(--bg2));min-height:100vh;font-family:'Inter',sans-serif;color:var(--text);display:flex;flex-direction:column;align-items:center;padding:16px}
+ a.back{align-self:flex-start;text-decoration:none;color:var(--accent);font-family:'Baloo 2';font-weight:700}
+ h1{font-family:'Baloo 2';font-weight:800;font-size:1.7rem;margin:6px 0;background:linear-gradient(100deg,var(--accent),var(--accent-2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+ .score{font-family:'Baloo 2';font-weight:700;margin-bottom:10px}
+ .msg{font-family:'Baloo 2';font-weight:700;margin-top:12px;min-height:24px;text-align:center}
+ .btn{margin-top:10px;border:0;border-radius:999px;padding:10px 24px;font-family:'Baloo 2';font-weight:700;color:#fff;background:linear-gradient(100deg,var(--accent),var(--accent-2));cursor:pointer} #g{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;width:min(88vw,340px);aspect-ratio:1}
+ .c{border-radius:8px;display:grid;place-items:center;font-family:'Baloo 2';font-weight:800;font-size:1.2rem;background:#fff;color:var(--text);cursor:pointer;box-shadow:0 3px 8px rgba(122,92,255,.12);user-select:none}
+ .c.hit{background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff}
+ .c.bad{background:#ff4d6d;color:#fff}
+</style></head><body>
+<a class="back" href="../index.html">← Playden</a><h1>👁️ Schulte Table</h1>
+<div class="score">Next: <span id="nx">1</span> · Time: <span id="t">0.0</span>s · Best: <span id="b">—</span></div>
+<div id="g"></div>
+<div class="msg" id="m">Tap 1 to 25 in order as fast as you can</div>
+<button class="btn" id="r">New table</button>
+<script>
+const G=document.getElementById('g');let next,start,timer,best=localStorage.getItem('schulteBest');
+document.getElementById('b').textContent=best?best+'s':'—';
+function build(){G.innerHTML='';next=1;document.getElementById('nx').textContent=1;document.getElementById('t').textContent='0.0';document.getElementById('m').textContent='Tap 1 to 25 in order';clearInterval(timer);start=null;
+ const nums=[...Array(25).keys()].map(x=>x+1).sort(()=>Math.random()-.5);
+ nums.forEach(n=>{const d=document.createElement('div');d.className='c';d.textContent=n;d.onclick=()=>tap(d,n);G.appendChild(d);});}
+function tap(d,n){if(n===1&&!start){start=Date.now();timer=setInterval(()=>document.getElementById('t').textContent=((Date.now()-start)/1000).toFixed(1),100);}
+ if(n===next){d.classList.add('hit');next++;document.getElementById('nx').textContent=next<=25?next:'✓';if(next>25){clearInterval(timer);const s=((Date.now()-start)/1000).toFixed(1);document.getElementById('m').textContent='🎉 Done in '+s+'s!';if(!best||+s<+best){best=s;localStorage.setItem('schulteBest',s);document.getElementById('b').textContent=s+'s';}}}
+ else{d.classList.add('bad');setTimeout(()=>d.classList.remove('bad'),200);}}
+document.getElementById('r').onclick=build;build();
+</script></body></html>

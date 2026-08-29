@@ -1,0 +1,32 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Simon · Playden</title><link rel="icon" href="../logo.svg">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Inter:wght@500&display=swap" rel="stylesheet">
+<style>
+ :root{--accent:#7a5cff;--accent-2:#00b8d4;--bg:#eef0ff;--bg2:#e0e6ff;--text:#1a1440}
+ *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+ body{background:linear-gradient(160deg,var(--bg),var(--bg2));min-height:100vh;font-family:'Inter',sans-serif;color:var(--text);display:flex;flex-direction:column;align-items:center;padding:16px}
+ a.back{align-self:flex-start;text-decoration:none;color:var(--accent);font-family:'Baloo 2';font-weight:700}
+ h1{font-family:'Baloo 2';font-weight:800;font-size:1.7rem;margin:6px 0;background:linear-gradient(100deg,var(--accent),var(--accent-2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+ .score{font-family:'Baloo 2';font-weight:700;margin-bottom:10px}
+ .msg{font-family:'Baloo 2';font-weight:700;margin-top:12px;min-height:24px;text-align:center}
+ .btn{margin-top:10px;border:0;border-radius:999px;padding:10px 24px;font-family:'Baloo 2';font-weight:700;color:#fff;background:linear-gradient(100deg,var(--accent),var(--accent-2));cursor:pointer}
+ #b{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;width:min(80vw,300px);aspect-ratio:1;margin-top:6px}
+ .p{border-radius:16px;cursor:pointer;opacity:.55;transition:opacity .15s;box-shadow:0 6px 16px rgba(122,92,255,.18)}
+ .p.lit{opacity:1}
+ .g{background:#12c46b}.r{background:#ff4d6d}.y{background:#ffd23f}.bl{background:#3a7dff}
+</style></head><body>
+<a class="back" href="../index.html">← Playden</a><h1>🧠 Simon</h1>
+<div class="score">Level: <span id="lv">0</span> · Best: <span id="bs">0</span></div>
+<div id="b"><div class="p g" data-i="0"></div><div class="p r" data-i="1"></div><div class="p y" data-i="2"></div><div class="p bl" data-i="3"></div></div>
+<div class="msg" id="m">Watch, then repeat the pattern</div>
+<button class="btn" id="s">Start</button>
+<script>
+const pads=[...document.querySelectorAll('.p')];let seq=[],step=0,playing=false,best=+(localStorage.getItem('simonBest')||0);
+document.getElementById('bs').textContent=best;
+function beep(el){el.classList.add('lit');setTimeout(()=>el.classList.remove('lit'),320);}
+function show(){playing=false;let i=0;const t=setInterval(()=>{beep(pads[seq[i]]);i++;if(i>=seq.length){clearInterval(t);playing=true;step=0;document.getElementById('m').textContent='Your turn!';}},600);}
+function next(){seq.push((Math.random()*4)|0);document.getElementById('lv').textContent=seq.length;document.getElementById('m').textContent='Watch…';setTimeout(show,600);}
+function start(){seq=[];document.getElementById('lv').textContent=0;next();}
+pads.forEach(p=>p.addEventListener('click',()=>{if(!playing)return;const i=+p.dataset.i;beep(p);if(i===seq[step]){step++;if(step>=seq.length){playing=false;if(seq.length>best){best=seq.length;localStorage.setItem('simonBest',best);document.getElementById('bs').textContent=best;}setTimeout(next,700);}}else{playing=false;document.getElementById('m').textContent='❌ Wrong! Reached level '+(seq.length-1);}}));
+document.getElementById('s').addEventListener('click',start);
+</script></body></html>

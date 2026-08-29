@@ -1,0 +1,36 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Code Breaker · Playden</title><link rel="icon" href="../logo.svg">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Inter:wght@500&display=swap" rel="stylesheet">
+<style>
+ :root{--accent:#7a5cff;--accent-2:#00b8d4;--bg:#eef0ff;--bg2:#e0e6ff;--text:#1a1440}
+ *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+ body{background:linear-gradient(160deg,var(--bg),var(--bg2));min-height:100vh;font-family:'Inter',sans-serif;color:var(--text);display:flex;flex-direction:column;align-items:center;padding:16px}
+ a.back{align-self:flex-start;text-decoration:none;color:var(--accent);font-family:'Baloo 2';font-weight:700}
+ h1{font-family:'Baloo 2';font-weight:800;font-size:1.7rem;margin:6px 0;background:linear-gradient(100deg,var(--accent),var(--accent-2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+ .score{font-family:'Baloo 2';font-weight:700;margin-bottom:10px}
+ .msg{font-family:'Baloo 2';font-weight:700;margin-top:12px;min-height:24px;text-align:center}
+ .btn{margin-top:10px;border:0;border-radius:999px;padding:10px 24px;font-family:'Baloo 2';font-weight:700;color:#fff;background:linear-gradient(100deg,var(--accent),var(--accent-2));cursor:pointer} input{font-family:'Baloo 2';font-weight:800;font-size:1.6rem;text-align:center;letter-spacing:10px;padding:12px;border-radius:12px;border:2px solid #cdd2ff;outline:0;width:min(70vw,220px)}
+ input:focus{border-color:var(--accent)}
+ .rows{width:min(86vw,320px);margin-top:12px}
+ .row{display:flex;justify-content:space-between;background:#fff;border-radius:10px;padding:10px 14px;margin-bottom:6px;font-family:'Baloo 2';font-weight:700;box-shadow:0 3px 8px rgba(122,92,255,.1)}
+ .row .res{color:var(--accent)}
+</style></head><body>
+<a class="back" href="../index.html">← Playden</a><h1>🔐 Code Breaker</h1>
+<div class="score">Guesses: <span id="g">0</span></div>
+<div class="msg" id="m">Guess the secret 4-digit code (digits 0–9, no repeats)</div>
+<input id="in" inputmode="numeric" maxlength="4" placeholder="1234">
+<button class="btn" id="b">Guess</button>
+<div class="rows" id="rows"></div>
+<script>
+let code,guesses;
+function make(){const d=[...Array(10).keys()].sort(()=>Math.random()-.5);code=d.slice(0,4).join('');guesses=0;document.getElementById('g').textContent=0;document.getElementById('rows').innerHTML='';document.getElementById('m').textContent='Guess the secret 4-digit code (no repeats)';document.getElementById('in').value='';}
+function guess(){const v=document.getElementById('in').value;if(!/^\d{4}$/.test(v)||new Set(v).size!==4){document.getElementById('m').textContent='Enter 4 different digits';return;}
+ guesses++;document.getElementById('g').textContent=guesses;
+ let bulls=0,cows=0;for(let i=0;i<4;i++){if(v[i]===code[i])bulls++;else if(code.includes(v[i]))cows++;}
+ const row=document.createElement('div');row.className='row';row.innerHTML='<span>'+v+'</span><span class="res">🎯 '+bulls+' right spot · 🔄 '+cows+' wrong spot</span>';document.getElementById('rows').prepend(row);
+ document.getElementById('in').value='';
+ if(bulls===4)document.getElementById('m').textContent='🎉 Cracked it in '+guesses+' guesses!';}
+document.getElementById('b').onclick=guess;
+document.getElementById('in').addEventListener('keydown',e=>{if(e.key==='Enter')guess();});
+make();
+</script></body></html>

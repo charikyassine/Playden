@@ -1,0 +1,35 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Math Blitz · Playden</title><link rel="icon" href="../logo.svg">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Inter:wght@500&display=swap" rel="stylesheet">
+<style>
+ :root{--accent:#7a5cff;--accent-2:#00b8d4;--bg:#eef0ff;--bg2:#e0e6ff;--text:#1a1440}
+ *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+ body{background:linear-gradient(160deg,var(--bg),var(--bg2));min-height:100vh;font-family:'Inter',sans-serif;color:var(--text);display:flex;flex-direction:column;align-items:center;padding:16px}
+ a.back{align-self:flex-start;text-decoration:none;color:var(--accent);font-family:'Baloo 2';font-weight:700}
+ h1{font-family:'Baloo 2';font-weight:800;font-size:1.7rem;margin:6px 0;background:linear-gradient(100deg,var(--accent),var(--accent-2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+ .score{font-family:'Baloo 2';font-weight:700;margin-bottom:10px}
+ .msg{font-family:'Baloo 2';font-weight:700;margin-top:12px;min-height:24px;text-align:center}
+ .btn{margin-top:10px;border:0;border-radius:999px;padding:10px 24px;font-family:'Baloo 2';font-weight:700;color:#fff;background:linear-gradient(100deg,var(--accent),var(--accent-2));cursor:pointer}
+ .q{font-family:'Baloo 2';font-weight:800;font-size:2.4rem;margin:14px 0}
+ .opts{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;width:min(84vw,320px)}
+ .opts button{border:0;border-radius:14px;padding:18px;font-family:'Baloo 2';font-weight:800;font-size:1.3rem;background:#fff;color:var(--text);cursor:pointer;box-shadow:0 5px 14px rgba(122,92,255,.14)}
+ .opts button:active{transform:scale(.97)}
+</style></head><body>
+<a class="back" href="../index.html">← Playden</a><h1>➗ Math Blitz</h1>
+<div class="score">Score: <span id="s">0</span> · Time: <span id="t">60</span>s · Best: <span id="b">0</span></div>
+<div class="q" id="q">Press Start</div>
+<div class="opts" id="o"></div>
+<div class="msg" id="m">Answer as many as you can in 60s</div>
+<button class="btn" id="r">Start</button>
+<script>
+let score,time,ans,playing=false,tick,best=+(localStorage.getItem('mathBest')||0);
+document.getElementById('b').textContent=best;
+const O=document.getElementById('o');
+function q(){const ops=['+','-','×'],op=ops[(Math.random()*3)|0];let a=(Math.random()*12+1)|0,c=(Math.random()*12+1)|0;if(op==='-'&&c>a)[a,c]=[c,a];ans=op==='+'?a+c:op==='-'?a-c:a*c;document.getElementById('q').textContent=a+' '+op+' '+c;
+ const set=new Set([ans]);while(set.size<4){set.add(ans+(( (Math.random()*11)|0)-5));}const arr=[...set].sort(()=>Math.random()-.5);
+ O.innerHTML='';arr.forEach(v=>{const btn=document.createElement('button');btn.textContent=v;btn.onclick=()=>pick(v);O.appendChild(btn);});}
+function pick(v){if(!playing)return;if(v===ans){score++;document.getElementById('s').textContent=score;}else{score=Math.max(0,score-1);document.getElementById('s').textContent=score;}q();}
+function start(){if(playing)return;playing=true;score=0;time=60;document.getElementById('s').textContent=0;document.getElementById('t').textContent=60;document.getElementById('m').textContent='Go!';q();tick=setInterval(()=>{time--;document.getElementById('t').textContent=time;if(time<=0)end();},1000);}
+function end(){playing=false;clearInterval(tick);document.getElementById('q').textContent='⏰ Time!';O.innerHTML='';document.getElementById('m').textContent='Final score: '+score;if(score>best){best=score;localStorage.setItem('mathBest',best);document.getElementById('b').textContent=best;}}
+document.getElementById('r').addEventListener('click',start);
+</script></body></html>

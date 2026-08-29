@@ -1,77 +1,58 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr" data-theme="nova">
+<html lang="en" dir="ltr" data-theme="focus">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Playden — your playground, your vibe</title>
-<meta name="description" content="Playden — 500+ free games you can theme and read in your language. English, العربية, Français, Español.">
+<title>Playden — brain games that make you sharper</title>
+<meta name="description" content="Playden — free brain-training games: memory, logic, focus and math. Play in your language, theme your way. English, العربية, Français, Español.">
 <link rel="icon" href="logo.svg" type="image/svg+xml">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Cairo:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root { --font-display:'Baloo 2',system-ui,sans-serif; --font-body:'Inter',system-ui,sans-serif; }
-  html[lang="ar"] { --font-display:'Cairo',system-ui,sans-serif; --font-body:'Cairo',system-ui,sans-serif; }
-  [data-theme="nova"] { --bg:#fff0f6; --bg2:#ffe1ee; --surface:#fff; --surface-2:#ffe9f2; --accent:#ff2e88; --accent-2:#ff7a3d; --text:#2a0f1e; --muted:#a25c7d; --line:rgba(255,46,136,.16); --glow:255,46,136; --ink:#fff; }
-  [data-theme="volt"] { --bg:#eafaff; --bg2:#d5f4ff; --surface:#fff; --surface-2:#e2f7ff; --accent:#00b8d4; --accent-2:#12c46b; --text:#062033; --muted:#3f7d95; --line:rgba(0,184,212,.16); --glow:0,184,212; --ink:#fff; }
-  * { margin:0; padding:0; box-sizing:border-box; }
-  html { scroll-behavior:smooth; }
-  body { background:linear-gradient(160deg,var(--bg),var(--bg2)); background-attachment:fixed; color:var(--text); font-family:var(--font-body); min-height:100vh; transition:background .5s ease,color .5s ease; overflow-x:hidden; }
-  .glow-orb { position:fixed; top:-25%; left:50%; transform:translateX(-50%); width:720px; height:720px; max-width:130vw; background:radial-gradient(circle,rgba(var(--glow),.22),transparent 62%); pointer-events:none; z-index:0; transition:background .5s ease; animation:float 8s ease-in-out infinite alternate; }
-  @keyframes float { from{transform:translateX(-50%) translateY(0) scale(1);} to{transform:translateX(-50%) translateY(30px) scale(1.08);} }
-  @keyframes bob { from{transform:translateY(0) rotate(-2deg);} to{transform:translateY(-14px) rotate(2deg);} }
-  @keyframes bob2 { from{transform:translateY(-8px);} to{transform:translateY(8px);} }
-  .wrap { position:relative; z-index:1; max-width:1060px; margin:0 auto; padding:22px 20px 60px; }
-  header { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
-  .brand { display:flex; align-items:center; gap:10px; }
-  .brand .mark { width:42px; height:42px; }
-  .brand .name { font-family:var(--font-display); font-weight:800; font-size:1.55rem; letter-spacing:-.5px; background:linear-gradient(100deg,var(--accent),var(--accent-2)); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
-  .controls { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
-  select.lang { font-family:var(--font-body); font-weight:600; font-size:.82rem; color:var(--text); background:var(--surface); border:1px solid var(--line); outline:0; padding:8px 12px; border-radius:999px; cursor:pointer; }
-  .toggle { display:inline-flex; background:var(--surface); border:1px solid var(--line); border-radius:999px; padding:4px; gap:2px; }
-  .toggle button { font-family:var(--font-display); font-weight:600; font-size:.82rem; border:0; background:transparent; color:var(--muted); padding:7px 15px; border-radius:999px; cursor:pointer; transition:all .3s ease; }
-  .toggle button.active { color:var(--ink); background:linear-gradient(100deg,var(--accent),var(--accent-2)); box-shadow:0 4px 14px rgba(var(--glow),.35); }
-  .hero { text-align:center; padding:26px 0 22px; position:relative; }
-  .hero .mascot { width:140px; height:140px; margin:0 auto 4px; animation:bob 3s ease-in-out infinite alternate; filter:drop-shadow(0 10px 18px rgba(var(--glow),.3)); }
-  .hero .peek { position:absolute; width:60px; height:60px; top:34px; opacity:.95; animation:bob2 2.6s ease-in-out infinite alternate; }
-  .hero .peek.left { left:6%; } .hero .peek.right { right:6%; animation-delay:.6s; }
-  .hero h1 { font-family:var(--font-display); font-weight:800; font-size:clamp(2.3rem,8.5vw,4rem); line-height:.98; letter-spacing:-1.5px; }
-  .hero h1 .pop { background:linear-gradient(100deg,var(--accent),var(--accent-2)); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
-  .hero p { color:var(--muted); margin-top:14px; font-size:1.05rem; }
-  .tools { display:flex; flex-direction:column; gap:14px; margin-top:20px; }
-  .search { display:flex; align-items:center; gap:10px; background:var(--surface); border:1px solid var(--line); border-radius:999px; padding:12px 18px; box-shadow:0 6px 20px rgba(var(--glow),.10); }
-  .search svg { width:20px; height:20px; flex:none; opacity:.6; }
-  .search input { border:0; outline:0; background:transparent; font-family:var(--font-body); font-size:1rem; color:var(--text); width:100%; }
-  .chips { display:flex; flex-wrap:wrap; gap:8px; }
-  .chip { font-family:var(--font-display); font-weight:600; font-size:.82rem; border:1px solid var(--line); background:var(--surface); color:var(--muted); padding:7px 14px; border-radius:999px; cursor:pointer; transition:all .2s ease; white-space:nowrap; }
-  .chip.active { color:var(--ink); background:linear-gradient(100deg,var(--accent),var(--accent-2)); border-color:transparent; }
-  .count { color:var(--muted); font-size:.82rem; margin:2px 4px; }
-  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:13px; }
-  .card { background:var(--surface); border:1px solid var(--line); border-radius:18px; padding:16px 14px 14px; cursor:pointer; transition:transform .2s ease,box-shadow .2s ease; box-shadow:0 5px 16px rgba(var(--glow),.08); }
-  .card:hover { transform:translateY(-5px); box-shadow:0 14px 28px rgba(var(--glow),.20); }
-  .card .emoji { font-size:2rem; display:grid; place-items:center; height:62px; border-radius:14px; background:linear-gradient(135deg,rgba(var(--glow),.14),transparent); margin-bottom:10px; }
-  .card h3 { font-family:var(--font-display); font-weight:600; font-size:.95rem; line-height:1.15; }
-  .card span { color:var(--muted); font-size:.76rem; }
-  a.card { text-decoration:none; color:inherit; display:block; position:relative; }
-  a.card.play { box-shadow:0 5px 16px rgba(var(--glow),.20), inset 0 0 0 1.5px rgba(var(--glow),.5); }
-  a.card.play:hover { box-shadow:0 16px 30px rgba(var(--glow),.28), inset 0 0 0 1.5px rgba(var(--glow),.7); }
-  .badge { position:absolute; top:10px; right:10px; width:24px; height:24px; border-radius:50%; display:grid; place-items:center; font-size:.7rem; color:var(--ink); background:linear-gradient(100deg,var(--accent),var(--accent-2)); box-shadow:0 3px 8px rgba(var(--glow),.4); }
-  html[dir="rtl"] .badge { right:auto; left:10px; }
-  .empty { color:var(--muted); text-align:center; padding:30px; grid-column:1/-1; }
-  .more-wrap { text-align:center; margin-top:22px; }
-  .more { font-family:var(--font-display); font-weight:700; font-size:.95rem; color:var(--ink); background:linear-gradient(100deg,var(--accent),var(--accent-2)); border:0; padding:12px 28px; border-radius:999px; cursor:pointer; box-shadow:0 8px 22px rgba(var(--glow),.32); }
-  .more:disabled { opacity:0; pointer-events:none; }
-  .section-label { font-family:var(--font-display); font-weight:700; font-size:1.3rem; margin:38px 4px 16px; }
-  .crew { display:flex; flex-wrap:wrap; gap:14px; justify-content:center; }
-  .buddy { background:var(--surface); border:1px solid var(--line); border-radius:20px; padding:16px 10px 12px; width:118px; text-align:center; box-shadow:0 6px 18px rgba(var(--glow),.10); transition:transform .25s ease, box-shadow .25s ease; }
-  .buddy:hover { transform:translateY(-6px); box-shadow:0 12px 26px rgba(var(--glow),.22); }
-  .buddy svg { width:72px; height:72px; animation:bob 3s ease-in-out infinite alternate; }
-  .buddy:nth-child(2n) svg { animation-delay:.5s; } .buddy:nth-child(3n) svg { animation-delay:1s; }
-  .buddy .bname { font-family:var(--font-display); font-weight:700; font-size:.95rem; margin-top:6px; }
-  footer { text-align:center; color:var(--muted); font-size:.85rem; margin-top:46px; }
-  footer a { color:var(--accent); font-weight:600; text-decoration:none; }
-  @media (prefers-reduced-motion:reduce) { * { animation:none !important; transition:none !important; } }
-  @media (max-width:520px){ .hero .peek{ display:none; } }
+  :root{--font-display:'Baloo 2',system-ui,sans-serif;--font-body:'Inter',system-ui,sans-serif}
+  html[lang="ar"]{--font-display:'Cairo',system-ui,sans-serif;--font-body:'Cairo',system-ui,sans-serif}
+  [data-theme="focus"]{--bg:#eef0ff;--bg2:#e0e6ff;--surface:#fff;--accent:#7a5cff;--accent-2:#00b8d4;--text:#1a1440;--muted:#6b6a9c;--line:rgba(122,92,255,.16);--glow:122,92,255;--ink:#fff}
+  [data-theme="sunrise"]{--bg:#fff0f6;--bg2:#ffe1ee;--surface:#fff;--accent:#ff2e88;--accent-2:#ff7a3d;--text:#2a0f1e;--muted:#a25c7d;--line:rgba(255,46,136,.16);--glow:255,46,136;--ink:#fff}
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:linear-gradient(160deg,var(--bg),var(--bg2));background-attachment:fixed;color:var(--text);font-family:var(--font-body);min-height:100vh;transition:background .5s;overflow-x:hidden}
+  .glow-orb{position:fixed;top:-25%;left:50%;transform:translateX(-50%);width:720px;height:720px;max-width:130vw;background:radial-gradient(circle,rgba(var(--glow),.2),transparent 62%);pointer-events:none;z-index:0;transition:background .5s;animation:float 8s ease-in-out infinite alternate}
+  @keyframes float{from{transform:translateX(-50%) translateY(0) scale(1)}to{transform:translateX(-50%) translateY(30px) scale(1.08)}}
+  @keyframes bob{from{transform:translateY(0) rotate(-2deg)}to{transform:translateY(-14px) rotate(2deg)}}
+  .wrap{position:relative;z-index:1;max-width:1060px;margin:0 auto;padding:22px 20px 60px}
+  header{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+  .brand{display:flex;align-items:center;gap:10px}.brand .mark{width:42px;height:42px}
+  .brand .name{font-family:var(--font-display);font-weight:800;font-size:1.55rem;letter-spacing:-.5px;background:linear-gradient(100deg,var(--accent),var(--accent-2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  select.lang{font-family:var(--font-body);font-weight:600;font-size:.82rem;color:var(--text);background:var(--surface);border:1px solid var(--line);outline:0;padding:8px 12px;border-radius:999px;cursor:pointer}
+  .toggle{display:inline-flex;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:4px;gap:2px}
+  .toggle button{font-family:var(--font-display);font-weight:600;font-size:.82rem;border:0;background:transparent;color:var(--muted);padding:7px 15px;border-radius:999px;cursor:pointer;transition:all .3s}
+  .toggle button.active{color:var(--ink);background:linear-gradient(100deg,var(--accent),var(--accent-2));box-shadow:0 4px 14px rgba(var(--glow),.35)}
+  .hero{text-align:center;padding:26px 0 20px;position:relative}
+  .hero .mascot{width:140px;height:140px;margin:0 auto 4px;animation:bob 3s ease-in-out infinite alternate;filter:drop-shadow(0 10px 18px rgba(var(--glow),.3))}
+  .hero h1{font-family:var(--font-display);font-weight:800;font-size:clamp(2.2rem,8vw,3.6rem);line-height:1;letter-spacing:-1.5px}
+  .hero h1 .pop{background:linear-gradient(100deg,var(--accent),var(--accent-2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .hero p{color:var(--muted);margin-top:14px;font-size:1.05rem}
+  .tools{display:flex;flex-direction:column;gap:14px;margin-top:20px}
+  .search{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:12px 18px;box-shadow:0 6px 20px rgba(var(--glow),.1)}
+  .search svg{width:20px;height:20px;flex:none;opacity:.6}
+  .search input{border:0;outline:0;background:transparent;font-family:var(--font-body);font-size:1rem;color:var(--text);width:100%}
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{font-family:var(--font-display);font-weight:600;font-size:.82rem;border:1px solid var(--line);background:var(--surface);color:var(--muted);padding:7px 14px;border-radius:999px;cursor:pointer;transition:all .2s;white-space:nowrap}
+  .chip.active{color:var(--ink);background:linear-gradient(100deg,var(--accent),var(--accent-2));border-color:transparent}
+  .count{color:var(--muted);font-size:.82rem;margin:2px 4px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px}
+  a.card{text-decoration:none;color:inherit;position:relative;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px 15px 15px;box-shadow:0 5px 16px rgba(var(--glow),.1);transition:transform .2s,box-shadow .2s;display:block}
+  a.card:hover{transform:translateY(-5px);box-shadow:0 16px 30px rgba(var(--glow),.22)}
+  .card .emoji{font-size:2.2rem;display:grid;place-items:center;height:66px;border-radius:14px;background:linear-gradient(135deg,rgba(var(--glow),.14),transparent);margin-bottom:11px}
+  .card h3{font-family:var(--font-display);font-weight:700;font-size:1rem;line-height:1.15}
+  .card p{color:var(--muted);font-size:.78rem;margin-top:3px}
+  .badge{position:absolute;top:12px;right:12px;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:.7rem;color:var(--ink);background:linear-gradient(100deg,var(--accent),var(--accent-2));box-shadow:0 3px 8px rgba(var(--glow),.4)}
+  html[dir="rtl"] .badge{right:auto;left:12px}
+  .empty{color:var(--muted);text-align:center;padding:30px;grid-column:1/-1}
+  footer{text-align:center;color:var(--muted);font-size:.85rem;margin-top:46px}
+  footer a{color:var(--accent);font-weight:600;text-decoration:none}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
@@ -82,8 +63,7 @@
         <svg class="mark" viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <defs><linearGradient id="m-body" x1="56" y1="66" x2="184" y2="194" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="var(--accent)"/><stop offset="1" stop-color="var(--accent-2)"/></linearGradient></defs>
           <ellipse cx="100" cy="196" rx="15" ry="9" fill="var(--accent)"/><ellipse cx="140" cy="196" rx="15" ry="9" fill="var(--accent)"/>
-          <path d="M120 72 L120 50" stroke="var(--accent-2)" stroke-width="8" stroke-linecap="round"/>
-          <path d="M120 24 l4 11 11 4 -11 4 -4 11 -4 -11 -11 -4 11 -4 Z" fill="#ffd23f"/>
+          <path d="M120 72 L120 50" stroke="var(--accent-2)" stroke-width="8" stroke-linecap="round"/><path d="M120 24 l4 11 11 4 -11 4 -4 11 -4 -11 -11 -4 11 -4 Z" fill="#ffd23f"/>
           <ellipse cx="120" cy="130" rx="64" ry="64" fill="url(#m-body)"/>
           <ellipse cx="101" cy="118" rx="14" ry="17" fill="#fff"/><ellipse cx="139" cy="118" rx="14" ry="17" fill="#fff"/>
           <circle cx="104" cy="122" r="7" fill="#20142a"/><circle cx="136" cy="122" r="7" fill="#20142a"/>
@@ -93,28 +73,18 @@
         <span class="name">playden</span>
       </div>
       <div class="controls">
-        <select class="lang" id="lang" aria-label="Language">
-          <option value="en">English</option><option value="ar">العربية</option><option value="fr">Français</option><option value="es">Español</option>
-        </select>
-        <div class="toggle" role="group" aria-label="Theme">
-          <button data-set="nova" class="active" aria-pressed="true">Nova</button>
-          <button data-set="volt" aria-pressed="false">Volt</button>
-        </div>
+        <select class="lang" id="lang" aria-label="Language"><option value="en">English</option><option value="ar">العربية</option><option value="fr">Français</option><option value="es">Español</option></select>
+        <div class="toggle" role="group" aria-label="Theme"><button data-set="focus" class="active">Focus</button><button data-set="sunrise">Sunrise</button></div>
       </div>
     </header>
 
     <section class="hero">
-      <svg class="peek left" viewBox="0 0 100 100" aria-hidden="true"><path d="M50 10 L61 38 L91 40 L67 59 L75 88 L50 71 L25 88 L33 59 L9 40 L39 38 Z" fill="#ffd23f" stroke="#e0a92a" stroke-width="3" stroke-linejoin="round"/><circle cx="42" cy="48" r="4" fill="#5a3d0a"/><circle cx="58" cy="48" r="4" fill="#5a3d0a"/><path d="M43 58 Q50 64 57 58" stroke="#5a3d0a" stroke-width="3" fill="none" stroke-linecap="round"/></svg>
-      <svg class="peek right" viewBox="0 0 100 100" aria-hidden="true"><path d="M50 12 L50 4" stroke="#7bdcf0" stroke-width="4" stroke-linecap="round"/><circle cx="50" cy="6" r="5" fill="#7bdcf0"/><rect x="22" y="24" width="56" height="52" rx="18" fill="#35c8e0" stroke="#1a9ab5" stroke-width="3"/><ellipse cx="40" cy="46" rx="9" ry="11" fill="#fff"/><ellipse cx="62" cy="46" rx="9" ry="11" fill="#fff"/><circle cx="41" cy="49" r="4.5" fill="#0d3b46"/><circle cx="63" cy="49" r="4.5" fill="#0d3b46"/><path d="M40 62 Q51 70 62 62" stroke="#0d3b46" stroke-width="3" fill="none" stroke-linecap="round"/></svg>
       <svg class="mascot" viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <defs><linearGradient id="h-body" x1="56" y1="66" x2="184" y2="194" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="var(--accent)"/><stop offset="1" stop-color="var(--accent-2)"/></linearGradient></defs>
         <ellipse cx="100" cy="196" rx="15" ry="9" fill="var(--accent)"/><ellipse cx="140" cy="196" rx="15" ry="9" fill="var(--accent)"/>
-        <path d="M60 142 L44 160" stroke="var(--accent)" stroke-width="14" stroke-linecap="round"/>
-        <path d="M180 126 L200 96" stroke="var(--accent-2)" stroke-width="14" stroke-linecap="round"/>
-        <path d="M120 72 L120 50" stroke="var(--accent-2)" stroke-width="8" stroke-linecap="round"/>
-        <path d="M120 22 l5 13 13 5 -13 5 -5 13 -5 -13 -13 -5 13 -5 Z" fill="#ffd23f"/>
+        <path d="M60 142 L44 160" stroke="var(--accent)" stroke-width="14" stroke-linecap="round"/><path d="M180 126 L200 96" stroke="var(--accent-2)" stroke-width="14" stroke-linecap="round"/>
+        <path d="M120 72 L120 50" stroke="var(--accent-2)" stroke-width="8" stroke-linecap="round"/><path d="M120 22 l5 13 13 5 -13 5 -5 13 -5 -13 -13 -5 13 -5 Z" fill="#ffd23f"/>
         <ellipse cx="120" cy="130" rx="64" ry="64" fill="url(#h-body)"/>
-        <ellipse cx="80" cy="134" rx="9" ry="6" fill="#fff" opacity=".4"/><ellipse cx="160" cy="134" rx="9" ry="6" fill="#fff" opacity=".4"/>
         <ellipse cx="101" cy="118" rx="14" ry="17" fill="#fff"/><ellipse cx="139" cy="118" rx="14" ry="17" fill="#fff"/>
         <circle cx="104" cy="122" r="7" fill="#20142a"/><circle cx="136" cy="122" r="7" fill="#20142a"/>
         <circle cx="101.5" cy="119" r="2.6" fill="#fff"/><circle cx="133.5" cy="119" r="2.6" fill="#fff"/>
@@ -126,136 +96,59 @@
     </section>
 
     <div class="tools">
-      <label class="search">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
-        <input id="search" type="search" aria-label="Search games">
-      </label>
+      <label class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><input id="search" type="search" aria-label="Search games"></label>
       <div class="chips" id="chips"></div>
       <div class="count" id="count"></div>
     </div>
-
     <div class="grid" id="game-grid"></div>
-    <div class="more-wrap"><button class="more" id="more">Load more</button></div>
-
-    <h2 class="section-label" data-t="crew"></h2>
-    <div class="crew">
-      <div class="buddy"><svg viewBox="0 0 100 100" aria-hidden="true"><path d="M50 10 L61 38 L91 40 L67 59 L75 88 L50 71 L25 88 L33 59 L9 40 L39 38 Z" fill="#ffd23f" stroke="#e0a92a" stroke-width="3" stroke-linejoin="round"/><circle cx="42" cy="48" r="4" fill="#5a3d0a"/><circle cx="58" cy="48" r="4" fill="#5a3d0a"/><path d="M43 58 Q50 64 57 58" stroke="#5a3d0a" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="34" cy="55" r="4" fill="#ff9ec4" opacity=".7"/><circle cx="66" cy="55" r="4" fill="#ff9ec4" opacity=".7"/></svg><div class="bname">Star</div></div>
-      <div class="buddy"><svg viewBox="0 0 100 100" aria-hidden="true"><path d="M50 12 L50 4" stroke="#7bdcf0" stroke-width="4" stroke-linecap="round"/><circle cx="50" cy="6" r="5" fill="#7bdcf0"/><rect x="22" y="24" width="56" height="52" rx="18" fill="#35c8e0" stroke="#1a9ab5" stroke-width="3"/><ellipse cx="40" cy="46" rx="9" ry="11" fill="#fff"/><ellipse cx="62" cy="46" rx="9" ry="11" fill="#fff"/><circle cx="41" cy="49" r="4.5" fill="#0d3b46"/><circle cx="63" cy="49" r="4.5" fill="#0d3b46"/><path d="M40 62 Q51 70 62 62" stroke="#0d3b46" stroke-width="3" fill="none" stroke-linecap="round"/><rect x="34" y="76" width="12" height="8" rx="4" fill="#1a9ab5"/><rect x="54" y="76" width="12" height="8" rx="4" fill="#1a9ab5"/></svg><div class="bname">Bolt</div></div>
-      <div class="buddy"><svg viewBox="0 0 100 100" aria-hidden="true"><ellipse cx="30" cy="66" rx="6" ry="9" fill="#3bbf86"/><ellipse cx="70" cy="66" rx="6" ry="9" fill="#3bbf86"/><ellipse cx="50" cy="54" rx="34" ry="34" fill="#4fd39a" stroke="#2a9d70" stroke-width="3"/><ellipse cx="40" cy="50" rx="8" ry="10" fill="#fff"/><ellipse cx="60" cy="50" rx="8" ry="10" fill="#fff"/><circle cx="41" cy="53" r="4" fill="#0f3d2b"/><circle cx="59" cy="53" r="4" fill="#0f3d2b"/><path d="M40 66 Q50 76 60 66" stroke="#0f3d2b" stroke-width="3" fill="none" stroke-linecap="round"/><ellipse cx="40" cy="86" rx="9" ry="5" fill="#2a9d70"/><ellipse cx="60" cy="86" rx="9" ry="5" fill="#2a9d70"/></svg><div class="bname">Bloop</div></div>
-      <div class="buddy"><svg viewBox="0 0 100 100" aria-hidden="true"><path d="M30 30 L26 12 L44 24 Z" fill="#a86bff" stroke="#7b45d6" stroke-width="3" stroke-linejoin="round"/><path d="M70 30 L74 12 L56 24 Z" fill="#a86bff" stroke="#7b45d6" stroke-width="3" stroke-linejoin="round"/><ellipse cx="50" cy="54" rx="32" ry="30" fill="#a86bff" stroke="#7b45d6" stroke-width="3"/><ellipse cx="40" cy="50" rx="8" ry="10" fill="#fff"/><ellipse cx="60" cy="50" rx="8" ry="10" fill="#fff"/><circle cx="41" cy="53" r="4" fill="#2e1155"/><circle cx="59" cy="53" r="4" fill="#2e1155"/><path d="M44 64 Q50 70 56 64" stroke="#2e1155" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M22 56 L34 58 M22 64 L34 63" stroke="#7b45d6" stroke-width="2" stroke-linecap="round"/><path d="M78 56 L66 58 M78 64 L66 63" stroke="#7b45d6" stroke-width="2" stroke-linecap="round"/></svg><div class="bname">Ziggy</div></div>
-    </div>
 
     <footer><span data-t="footer"></span> · <a href="blog.html" data-t="blog">Blog</a></footer>
   </div>
 
 <script>
-  const I18N = {
-    en:{dir:"ltr",h1:"Your playground,",h2:"your vibe.",sub:"500+ games. Pick a look, pick a language — your way.",crew:"Meet the crew",footer:"Made for fun · Playden",blog:"Blog",all:"All",searchPh:"Search 500+ games…",more:"Load more",found:n=>`${n} games`,
-        cats:{arcade:"Arcade",brain:"Puzzle",racing:"Racing",casual:"Casual",sports:"Sports",classic:"Classic",cards:"Cards",creative:"Creative",strategy:"Strategy",platformer:"Platformer"}},
-    ar:{dir:"rtl",h1:"ملعبك،",h2:"بأسلوبك.",sub:"أكثر من 500 لعبة. اختر مظهرك ولغتك — على طريقتك.",crew:"تعرّف على الفريق",footer:"صُنع للمتعة · Playden",blog:"المدونة",all:"الكل",searchPh:"ابحث في 500+ لعبة…",more:"عرض المزيد",found:n=>`${n} لعبة`,
-        cats:{arcade:"أركيد",brain:"ألغاز",racing:"سباق",casual:"عادية",sports:"رياضة",classic:"كلاسيكية",cards:"ورق",creative:"إبداعية",strategy:"استراتيجية",platformer:"منصات"}},
-    fr:{dir:"ltr",h1:"Ton terrain de jeu,",h2:"ton style.",sub:"500+ jeux. Choisis ton look, ta langue — à ta façon.",crew:"Voici l'équipe",footer:"Fait pour s'amuser · Playden",blog:"Blog",all:"Tout",searchPh:"Rechercher parmi 500+ jeux…",more:"Voir plus",found:n=>`${n} jeux`,
-        cats:{arcade:"Arcade",brain:"Réflexion",racing:"Course",casual:"Détente",sports:"Sport",classic:"Classique",cards:"Cartes",creative:"Créatif",strategy:"Stratégie",platformer:"Plateforme"}},
-    es:{dir:"ltr",h1:"Tu patio de juegos,",h2:"tu estilo.",sub:"500+ juegos. Elige tu aspecto y tu idioma — a tu manera.",crew:"Conoce al equipo",footer:"Hecho para divertirse · Playden",blog:"Blog",all:"Todos",searchPh:"Buscar en 500+ juegos…",more:"Ver más",found:n=>`${n} juegos`,
-        cats:{arcade:"Arcade",brain:"Puzzle",racing:"Carreras",casual:"Casual",sports:"Deportes",classic:"Clásico",cards:"Cartas",creative:"Creativo",strategy:"Estrategia",platformer:"Plataformas"}}
+  const I18N={
+    en:{dir:"ltr",h1:"Train your brain,",h2:"the fun way.",sub:"Free games for memory, logic, focus and speed. Your language, your theme.",footer:"Made for sharper minds · Playden",blog:"Blog",all:"All",searchPh:"Search games…",found:n=>`${n} games`,
+        cats:{memory:"Memory",logic:"Logic",focus:"Focus",math:"Math",words:"Words",arcade:"Arcade"}},
+    ar:{dir:"rtl",h1:"درّب عقلك،",h2:"بطريقة ممتعة.",sub:"ألعاب مجانية للذاكرة والمنطق والتركيز والسرعة. بلغتك ومظهرك.",footer:"لعقول أكثر حدّة · Playden",blog:"المدونة",all:"الكل",searchPh:"ابحث عن لعبة…",found:n=>`${n} لعبة`,
+        cats:{memory:"ذاكرة",logic:"منطق",focus:"تركيز",math:"حساب",words:"كلمات",arcade:"أركيد"}},
+    fr:{dir:"ltr",h1:"Entraîne ton cerveau,",h2:"en t'amusant.",sub:"Jeux gratuits de mémoire, logique, concentration et vitesse. Ta langue, ton thème.",footer:"Pour des esprits affûtés · Playden",blog:"Blog",all:"Tout",searchPh:"Rechercher un jeu…",found:n=>`${n} jeux`,
+        cats:{memory:"Mémoire",logic:"Logique",focus:"Concentration",math:"Calcul",words:"Mots",arcade:"Arcade"}},
+    es:{dir:"ltr",h1:"Entrena tu cerebro,",h2:"jugando.",sub:"Juegos gratis de memoria, lógica, concentración y velocidad. Tu idioma, tu tema.",footer:"Para mentes más ágiles · Playden",blog:"Blog",all:"Todos",searchPh:"Buscar juegos…",found:n=>`${n} juegos`,
+        cats:{memory:"Memoria",logic:"Lógica",focus:"Concentración",math:"Cálculo",words:"Palabras",arcade:"Arcade"}}
   };
-  const CAT_EMOJI = {arcade:"🕹️",brain:"🧩",racing:"🏎️",casual:"🍭",sports:"⚽",classic:"🎮",cards:"🃏",creative:"🎨",strategy:"🏰",platformer:"🌟"};
-
-  // curated names first, then auto-generated combos to reach 52 per category (520 total)
-  const CURATED = {
-    arcade:["Bullseye","Space Rush","Neon Dodge","Pixel Blaster","Astro Pop","Laser Loop","Meteor Muncher","Coin Craze","Turbo Tap","Blast Off","Orbit Breaker","Retro Runner"],
-    brain:["Puzzle Pop","Block Fit","Hex Link","Color Flow","Match Mania","Logic Locks","Tile Twist","Brain Bloom","Number Nest","Shape Shift","Maze Maker","Sudoku Star"],
-    racing:["Turbo Dash","Drift King","Speed Loop","Nitro Rush","Kart Chaos","Moto Mayhem","Track Attack","Pixel Racer","Fast Lane","Boost Buggy","Rally Rush","Neon Drift"],
-    casual:["Candy Match","Bubble Burst","Fruit Slice","Jelly Jump","Cookie Crush","Balloon Pop","Donut Dash","Sweet Swap","Pop Party","Merge Mania","Idle Isle","Tap Tower"],
-    sports:["Goal Kick","Hoop Hero","Home Run","Ace Serve","Puck Slap","Pin Strike","Golf Pro","Rugby Run","Sprint Star","Penalty Pro","Slam Dunk","Table Tennis"],
-    classic:["Snake XL","Block Drop","Paddle Bash","Brick Buster","Minesweeper","Checkers","Chess","Reversi","Line Up","Dots & Boxes","Hangman","Tic-Tac-Toe"],
-    cards:["Solitaire","Spider","FreeCell","Blackjack","Memory Match","Go Fish","Crazy Eights","War","Pyramid","Klondike","Hearts","Speed"],
-    creative:["Draw It","Pixel Paint","Beat Maker","Doodle Dash","Color Book","Sticker Studio","Melody Mix","Sand Art","Piano Play","Comic Maker","Emoji Art","Pattern Pop"],
-    strategy:["Tower Defend","Base Builder","Chess Quest","Army Ants","Castle Clash","Kingdom Keep","Merge Kingdom","Trap Master","Grid Wars","Resource Rush","Path Guard","Empire Up"],
-    platformer:["Aqua Jump","Sky Hopper","Jungle Leap","Robot Run","Ninja Climb","Lava Leap","Cave Dash","Cloud Bounce","Pixel Quest","Slime Slide","Star Skip","Gravity Guy"]
-  };
-  const ADJ = ["Turbo","Neon","Pixel","Mega","Super","Hyper","Cosmic","Rapid","Wild","Epic","Mighty","Blazing","Frost","Shadow","Golden","Crystal","Rocket","Thunder","Lucky","Crazy","Astro","Galaxy","Volt","Storm","Jelly"];
-  const NOUN = {
-    arcade:["Blast","Dodge","Rush","Pop","Zap","Runner","Muncher","Breaker","Shooter","Loop"],
-    brain:["Puzzle","Logic","Match","Tiles","Blocks","Riddle","Maze","Cipher","Nest","Twist"],
-    racing:["Racer","Drift","Dash","Kart","Moto","Speedway","Rally","Circuit","Nitro","Track"],
-    casual:["Match","Pop","Merge","Bubbles","Candy","Jelly","Cookie","Tap","Idle","Farm"],
-    sports:["Kick","Dunk","Goal","Serve","Slam","Sprint","Strike","Pitch","Bowl","Rally"],
-    classic:["Snake","Blocks","Paddle","Bricks","Mines","Dots","Lines","Grid","Board","Match"],
-    cards:["Solitaire","Poker","Rummy","Hearts","Spades","Pyramid","Klondike","Memory","Deck","Match"],
-    creative:["Draw","Paint","Beat","Doodle","Melody","Studio","Color","Piano","Comic","Pixels"],
-    strategy:["Empire","Castle","Tower","Kingdom","Army","Base","Defense","Clash","Siege","Command"],
-    platformer:["Jump","Hopper","Leap","Climb","Dash","Bounce","Runner","Quest","Slide","Skip"]
-  };
-  const PER_CAT = 52;
-  // ▶ REAL PLAYABLE GAMES — to add an open-source game, copy a line here:
-  // { name:"Game Name", cat:"brain", emoji:"🔷", file:"games/yourgame/index.html" }
-  const PLAYABLE = [
-    { name:"Snake",        cat:"classic",    emoji:"🐍", file:"snake.html" },
-    { name:"2048",         cat:"brain",      emoji:"🔢", file:"2048.html" },
-    { name:"Memory Match", cat:"brain",      emoji:"🧠", file:"memory.html" },
-    { name:"Tic-Tac-Toe",  cat:"classic",    emoji:"⭕", file:"tictactoe.html" },
-    { name:"Minesweeper",  cat:"classic",    emoji:"💣", file:"minesweeper.html" },
-    { name:"Brick Breaker",cat:"arcade",     emoji:"🧱", file:"breakout.html" },
-    { name:"Whack-a-Mole", cat:"arcade",     emoji:"🔨", file:"whack.html" }
+  // Real, working games — add more by copying a line
+  const GAMES=[
+    {name:"2048",cat:"logic",emoji:"🔢",file:"2048.html",d:{en:"Merge tiles to 2048",ar:"ادمج للوصول إلى 2048",fr:"Fusionne jusqu'à 2048",es:"Une hasta 2048"}},
+    {name:"Memory Match",cat:"memory",emoji:"🧠",file:"memory.html",d:{en:"Find all the pairs",ar:"جد كل الأزواج",fr:"Trouve les paires",es:"Encuentra las parejas"}},
+    {name:"Simon",cat:"memory",emoji:"🎵",file:"simon.html",d:{en:"Repeat the sequence",ar:"كرّر التسلسل",fr:"Répète la séquence",es:"Repite la secuencia"}},
+    {name:"Sliding Puzzle",cat:"logic",emoji:"🧩",file:"slide.html",d:{en:"Order 1–15",ar:"رتّب 1–15",fr:"Ordonne 1–15",es:"Ordena 1–15"}},
+    {name:"Sudoku-style",cat:"logic",emoji:"⬜",file:"lightsout.html",d:{en:"Turn the lights off",ar:"أطفئ الأضواء",fr:"Éteins les lumières",es:"Apaga las luces"}},
+    {name:"Minesweeper",cat:"logic",emoji:"💣",file:"minesweeper.html",d:{en:"Avoid the mines",ar:"تجنّب الألغام",fr:"Évite les mines",es:"Evita las minas"}},
+    {name:"Tower of Hanoi",cat:"logic",emoji:"🗼",file:"hanoi.html",d:{en:"Move the tower",ar:"انقل البرج",fr:"Déplace la tour",es:"Mueve la torre"}},
+    {name:"Code Breaker",cat:"logic",emoji:"🔐",file:"codebreaker.html",d:{en:"Crack the code",ar:"فكّ الشيفرة",fr:"Trouve le code",es:"Descifra el código"}},
+    {name:"Tic-Tac-Toe",cat:"logic",emoji:"⭕",file:"tictactoe.html",d:{en:"Beat the computer",ar:"اهزم الكمبيوتر",fr:"Bats l'ordinateur",es:"Vence a la máquina"}},
+    {name:"Schulte Table",cat:"focus",emoji:"👁️",file:"schulte.html",d:{en:"Find 1–25 fast",ar:"جد 1–25 بسرعة",fr:"Trouve 1–25 vite",es:"Encuentra 1–25"}},
+    {name:"Color Clash",cat:"focus",emoji:"🎨",file:"stroop.html",d:{en:"Name the color",ar:"سمِّ اللون",fr:"Nomme la couleur",es:"Nombra el color"}},
+    {name:"Math Blitz",cat:"math",emoji:"➗",file:"math.html",d:{en:"Fast mental math",ar:"حساب ذهني سريع",fr:"Calcul mental rapide",es:"Cálculo mental"}},
+    {name:"Word Scramble",cat:"words",emoji:"🔤",file:"scramble.html",d:{en:"Unscramble words",ar:"رتّب الحروف",fr:"Remets les lettres",es:"Ordena las letras"}},
+    {name:"Snake",cat:"arcade",emoji:"🐍",file:"snake.html",d:{en:"Classic snake",ar:"ثعبان كلاسيكي",fr:"Serpent classique",es:"Snake clásico"}},
+    {name:"Brick Breaker",cat:"arcade",emoji:"🧱",file:"breakout.html",d:{en:"Break the bricks",ar:"حطّم الطوب",fr:"Casse les briques",es:"Rompe los ladrillos"}},
+    {name:"Whack-a-Mole",cat:"arcade",emoji:"🔨",file:"whack.html",d:{en:"Tap the moles",ar:"انقر الحيوانات",fr:"Tape les taupes",es:"Golpea los topos"}}
   ];
-
-  const GAMES = [];
-  PLAYABLE.forEach(g=>GAMES.push(g)); // real games first
-  const playableNames = new Set(PLAYABLE.map(g=>g.name));
-  Object.keys(NOUN).forEach(cat=>{
-    const seen=new Set(), out=[];
-    (CURATED[cat]||[]).forEach(n=>{ if(!seen.has(n)){seen.add(n);out.push(n);} });
-    outer: for(const a of ADJ){ for(const n of NOUN[cat]){ const nm=a+" "+n; if(!seen.has(nm)){seen.add(nm);out.push(nm);} if(out.length>=PER_CAT) break outer; } }
-    out.forEach(name=>{ if(!playableNames.has(name)) GAMES.push({name,cat}); });
-  });
-
-  const PAGE = 60;
-  let curCat="all", curQuery="", shown=PAGE;
-  const grid=document.getElementById("game-grid"), chipsEl=document.getElementById("chips"),
-        countEl=document.getElementById("count"), searchEl=document.getElementById("search"), moreBtn=document.getElementById("more");
-  const T = () => I18N[document.documentElement.getAttribute("lang")] || I18N.en;
-
-  function filtered(){
-    const q=curQuery.trim().toLowerCase();
-    return GAMES.filter(g => (curCat==="all"||g.cat===curCat) && (q===""||g.name.toLowerCase().includes(q)));
-  }
-  function renderChips(){
-    const t=T(), cats=["all",...Object.keys(NOUN)];
-    chipsEl.innerHTML = cats.map(c=>{ const label=c==="all"?t.all:(CAT_EMOJI[c]+" "+t.cats[c]); return `<button class="chip ${c===curCat?"active":""}" data-cat="${c}">${label}</button>`; }).join("");
-    chipsEl.querySelectorAll(".chip").forEach(ch=>ch.addEventListener("click",()=>{ curCat=ch.dataset.cat; shown=PAGE; renderChips(); renderGames(); }));
-  }
-  function renderGames(){
-    const t=T(), list=filtered();
-    countEl.textContent = t.found(list.length);
-    const page=list.slice(0,shown);
-    grid.innerHTML = page.length ? page.map(g=>{
-      const emoji=g.emoji||CAT_EMOJI[g.cat];
-      const inner=`<div class="emoji">${emoji}</div><h3>${g.name}</h3><span>${t.cats[g.cat]}</span>`;
-      return g.file
-        ? `<a class="card play" href="${g.file}"><span class="badge">▶</span>${inner}</a>`
-        : `<div class="card">${inner}</div>`;
-    }).join("") : `<div class="empty">🔍</div>`;
-    moreBtn.textContent = t.more;
-    moreBtn.disabled = shown>=list.length;
-  }
-  function applyLang(code){
-    const t=I18N[code], html=document.documentElement;
-    html.setAttribute("lang",code); html.setAttribute("dir",t.dir);
-    document.querySelectorAll("[data-t]").forEach(el=>{ el.textContent=t[el.dataset.t]; });
-    searchEl.placeholder=t.searchPh; renderChips(); renderGames();
-  }
-  searchEl.addEventListener("input",e=>{ curQuery=e.target.value; shown=PAGE; renderGames(); });
-  moreBtn.addEventListener("click",()=>{ shown+=PAGE; renderGames(); });
+  const CAT_EMOJI={memory:"🧠",logic:"🧩",focus:"👁️",math:"➗",words:"🔤",arcade:"🕹️"};
+  let curCat="all",curQuery="";
+  const grid=document.getElementById("game-grid"),chipsEl=document.getElementById("chips"),countEl=document.getElementById("count"),searchEl=document.getElementById("search");
+  const T=()=>I18N[document.documentElement.getAttribute("lang")]||I18N.en;
+  const langCode=()=>document.documentElement.getAttribute("lang")||"en";
+  function cats(){const s=[];GAMES.forEach(g=>{if(!s.includes(g.cat))s.push(g.cat);});return s;}
+  function filtered(){const q=curQuery.trim().toLowerCase();return GAMES.filter(g=>(curCat==="all"||g.cat===curCat)&&(q===""||g.name.toLowerCase().includes(q)));}
+  function renderChips(){const t=T(),cs=["all",...cats()];chipsEl.innerHTML=cs.map(c=>{const label=c==="all"?t.all:(CAT_EMOJI[c]+" "+t.cats[c]);return `<button class="chip ${c===curCat?"active":""}" data-cat="${c}">${label}</button>`;}).join("");chipsEl.querySelectorAll(".chip").forEach(ch=>ch.addEventListener("click",()=>{curCat=ch.dataset.cat;renderChips();renderGames();}));}
+  function renderGames(){const t=T(),lc=langCode(),list=filtered();countEl.textContent=t.found(list.length);grid.innerHTML=list.length?list.map(g=>`<a class="card" href="${g.file}"><span class="badge">▶</span><div class="emoji">${g.emoji}</div><h3>${g.name}</h3><p>${(g.d&&g.d[lc])||""}</p></a>`).join(""):`<div class="empty">🔍</div>`;}
+  function applyLang(code){const t=I18N[code],html=document.documentElement;html.setAttribute("lang",code);html.setAttribute("dir",t.dir);document.querySelectorAll("[data-t]").forEach(el=>{el.textContent=t[el.dataset.t];});searchEl.placeholder=t.searchPh;renderChips();renderGames();}
+  searchEl.addEventListener("input",e=>{curQuery=e.target.value;renderGames();});
   document.getElementById("lang").addEventListener("change",e=>applyLang(e.target.value));
   const buttons=document.querySelectorAll(".toggle button");
-  buttons.forEach(btn=>btn.addEventListener("click",()=>{
-    document.documentElement.setAttribute("data-theme",btn.dataset.set);
-    buttons.forEach(b=>{b.classList.remove("active");b.setAttribute("aria-pressed","false");});
-    btn.classList.add("active"); btn.setAttribute("aria-pressed","true");
-  }));
+  buttons.forEach(btn=>btn.addEventListener("click",()=>{document.documentElement.setAttribute("data-theme",btn.dataset.set);buttons.forEach(b=>b.classList.remove("active"));btn.classList.add("active");}));
   applyLang("en");
-  console.log("Total games:", GAMES.length);
-</script>
-</body>
-</html>
+  console.log("Games:",GAMES.length);
+</script></body></html>
